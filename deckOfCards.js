@@ -7,6 +7,7 @@ let dealersHand = [];
 let playersHand = [];
 let deckIndex = 4;
 
+
 // create a deck of cards
 (mkDeck = () => {
   for (v in faceVal) {
@@ -80,7 +81,7 @@ let dealersShowVal = calShowVal(dealersShowCard);
 // player asks for another card
 hit = () => {
   playersHand.push(deck[deckIndex]);
-
+  document.getElementById('playersHand').innerHTML = playersHand;
   if (deck[deckIndex].charAt(0) === 'A') {
     playersVal += 11;    
   }else if (deck[deckIndex].charAt(0) === 'K') {
@@ -118,45 +119,70 @@ hit = () => {
 
 // all actions taken by dealer when player chooses to stay
 stay = () => {
+  console.log(dealersHand);
+  // show dealers 2 card hand and value and return value if over 17
   document.getElementById('dealersTurn').innerHTML = 'Dealer has';
+  document.getElementById('dealerBtn').innerHTML = 'Next card';
   document.getElementById('dealersVal').innerHTML = dealersVal;
-  if (dealersVal < 17) {
-    dealersHand.push(deck[deckIndex]);
-
-  if (deck[deckIndex].charAt(0) === 'A') {
-    dealersVal += 11;    
-  }else if (deck[deckIndex].charAt(0) === 'K') {
-    dealersVal += 10;    
-  }else if (deck[deckIndex].charAt(0) === 'Q') {
-    dealersVal += 10;    
-  }else if (deck[deckIndex].charAt(0) === 'J') {
-    dealersVal += 10;    
-  }else{
-    dealersVal += parseInt(deck[deckIndex]);
+  document.getElementById('dealersHand').innerHTML = dealersHand;
+  document.getElementById('dealersShowCard').innerHTML = '';
+  if (dealersVal >= 17) {
+    console.log('function stoped')
+    return
   }
-  deckIndex++;
-}
+  
 
-  // convert Ace to a value of 1 when player has over 21
-  if (dealersVal > 21) {
-    for (i in dealersHand) {
-      if (dealersHand[i].charAt(0) === 'A') {
-        console.log('if statment reached');
-        dealersHand[i] = '1' + dealersHand[i];
-        dealersVal -= 10;
-      }
+    if (dealersVal < 17) {
+      setTimeout(function(){
+        dealersHand.push(deck[deckIndex]);
+
+        console.log(dealersVal)
+        if (deck[deckIndex].charAt(0) === 'A') {
+          dealersVal += 11;    
+        }else if (deck[deckIndex].charAt(0) === 'K') {
+          dealersVal += 10;    
+        }else if (deck[deckIndex].charAt(0) === 'Q') {
+          dealersVal += 10;    
+        }else if (deck[deckIndex].charAt(0) === 'J') {
+          dealersVal += 10;    
+        }else{
+          dealersVal += parseInt(deck[deckIndex]);
+        }
+        deckIndex++;
+        console.log(dealersHand, dealersVal);
+      }, 3000);
+        
+        // convert Ace to a value of 1 when player has over 21
+        if (dealersVal > 21) {
+          for (i in dealersHand) {
+            if (dealersHand[i].charAt(0) === 'A') {
+              console.log('dealer has over 21 and an ace')
+              dealersHand[i] = '1' + dealersHand[i];
+              dealersVal -= 10;
+            }
+          }
+        }
+        document.getElementById('dealersVal').innerHTML = dealersVal;
+        
     }
+    document.getElementById('dealersVal').innerHTML = dealersVal;
+    if (dealersVal == 21) {
+      document.getElementById('dealerStatus').innerHTML = '21';
+    }
+    if (dealersVal > 21) {
+      document.getElementById('dealerStatus').innerHTML = 'Bust';
+    };
   }
-  console.log(dealersHand, dealersVal);
-  document.getElementById('dealersVal').innerHTML = dealersVal;
-  if (dealersVal == 21) {
-    document.getElementById('dealerStatus').innerHTML = '21';
-  }
-  if (dealersVal > 21) {
-    document.getElementById('dealerStatus').innerHTML = 'Bust';
-  }
-}
 
+
+
+
+
+// display dealers show card
+document.getElementById('dealersShowCard').innerHTML = dealersShowCard;
+
+// display players hand
+document.getElementById('playersHand').innerHTML = playersHand;
 
 // display dealers show value
 document.getElementById('dealersVal').innerHTML = dealersShowVal;
